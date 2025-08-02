@@ -1,74 +1,47 @@
-const products = [
-  {
-    name: "iPhone 14",
-    price: 70000,
-    image: "https://via.placeholder.com/200x150?text=iPhone+14"
-  },
-  {
-    name: "Samsung Galaxy S23",
-    price: 65000,
-    image: "https://via.placeholder.com/200x150?text=Galaxy+S23"
-  },
-  {
-    name: "Redmi Note 12",
-    price: 18000,
-    image: "https://via.placeholder.com/200x150?text=Redmi+Note+12"
-  },
-  {
-    name: "Sony Headphones",
-    price: 8000,
-    image: "https://via.placeholder.com/200x150?text=Sony+Headphones"
-  },
-  {
-    name: "Smart Watch",
-    price: 3000,
-    image: "https://via.placeholder.com/200x150?text=Smart+Watch"
+let noClicks = 0;
+const noBtn = document.getElementById("noBtn");
+
+function handleYes() {
+  document.body.innerHTML = `
+    <h1>Yay! Cutie said YES! 😻</h1>
+    <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" class="cat" />
+  `;
+}
+
+function handleNo() {
+  noClicks++;
+
+  if (noClicks === 1) {
+    alert("Are you sure cutu? might regret this 😢");
+  } else if (noClicks === 2) {
+    alert("Think again... what if it’s the best decision ever? 😀");
+  } else if (noClicks === 3) {
+    alert("This could be your cutest memory 💖");
+  } else if (noClicks === 4) {
+    alert("Final chance... I will be sad 😿");
+  } else if (noClicks >= 5) {
+    makeButtonRunAway();
   }
-];
-
-const productContainer = document.getElementById("product-container");
-const cartItems = [];
-const cartItemsList = document.getElementById("cart-items");
-const cartTotalEl = document.getElementById("cart-total");
-
-function renderProducts() {
-  products.forEach((product, index) => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-    card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" />
-      <h3>${product.name}</h3>
-      <p>₹${product.price}</p>
-      <button onclick="addToCart(${index})">Add to Cart</button>
-    `;
-    productContainer.appendChild(card);
-  });
 }
 
-function addToCart(index) {
-  cartItems.push(products[index]);
-  alert(`${products[index].name} added to cart!`);
-  updateCart();
+function makeButtonRunAway() {
+  noBtn.classList.add("runaway");
+
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    // Mobile: teleport on touch
+    noBtn.addEventListener("touchstart", (e) => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    });
+  } else {
+    // Desktop: avoid mouse
+    document.addEventListener("mousemove", (e) => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    });
+  }
 }
-
-function updateCart() {
-  cartItemsList.innerHTML = "";
-  let total = 0;
-  cartItems.forEach((item) => {
-    const li = document.createElement("li");
-    li.textContent = `${item.name} - ₹${item.price}`;
-    cartItemsList.appendChild(li);
-    total += item.price;
-  });
-  cartTotalEl.textContent = total;
-}
-
-function closeCart() {
-  document.getElementById("cart-modal").classList.add("hidden");
-}
-
-document.getElementById("view-cart-btn").addEventListener("click", () => {
-  document.getElementById("cart-modal").classList.remove("hidden");
-});
-
-renderProducts();
